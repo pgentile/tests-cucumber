@@ -1,0 +1,18 @@
+{
+  "name": "Zucchini",
+  "short_name": "Zucchini",
+  "description": "Zucchini est une application pour analyser les tests Cucumber",
+  "lang": "fr",
+  "dir": "ltr",
+  "background_color": "#343a40",
+  "theme_color": "#ffffff",
+  "display": "minimal-ui",
+  "start_url": "/ui/",
+  "scope": "/ui/",
+  "icons": [
+    {
+      "src": "./favicon.png",
+      "sizes": "1024x1024"
+    }
+  ]
+}

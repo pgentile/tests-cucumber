@@ -35,10 +35,17 @@ module.exports = (env, argv) => {
       minimizer: ["...", new CssMinimizerPlugin()]
     },
     devServer: {
+      host: "0.0.0.0",
       port: devServerPort,
       publicPath,
       historyApiFallback: true,
+      contentBase: path.join(__dirname, "public"),
       before: (app) => {
+        app.get(/service-worker.*\.js$/, (req, res, next) => {
+          res.append("Service-Worker-Allowed", "/ui/");
+          next();
+        });
+
         app.get("/", (req, res) => {
           res.redirect("/ui/");
         });
