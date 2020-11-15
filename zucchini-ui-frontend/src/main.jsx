@@ -18,7 +18,7 @@ window.addEventListener("load", async () => {
       console.info("[SW Client] Controller changed", event);
     });
 
-    await navigator.serviceWorker.register(new URL("./service-worker.js", import.meta.url), {
+    await navigator.serviceWorker.register(new URL("./serviceWorker.js", import.meta.url), {
       scope: "/ui/"
     });
   }
