@@ -22,6 +22,16 @@
   },
   "overrides": [
     {
+      "files": ["src/serviceWorker.js"],
+      "env": {
+        "browser": false,
+        "serviceworker": true
+      },
+      "globals": {
+        "AbortController": true
+      }
+    },
+    {
       "files": ["src/**/*.test.js", "src/**/*.test.jsx"],
       "env": {
         "jest/globals": true

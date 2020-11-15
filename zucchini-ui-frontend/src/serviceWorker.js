@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-const cacheName = "v3";
+const cacheName = "v8";
 const rootUrl = "/ui/";
 
 addEventListener("install", (event) => {
@@ -17,19 +17,16 @@ addEventListener("install", (event) => {
 addEventListener("activate", (event) => {
   console.log("[Service Worker] Activation:", event);
 
-  const cleanCacheThenClaim = async () => {
+  const cleanOldCaches = async () => {
     const keys = await caches.keys();
     for (const key of keys) {
       if (key !== cacheName) {
         await caches.delete(key);
       }
     }
-
-    // eslint-disable-next-line no-undef
-    await clients.claim();
   };
 
-  event.waitUntil(cleanCacheThenClaim());
+  event.waitUntil(cleanOldCaches());
 });
 
 addEventListener("fetch", async (event) => {
@@ -75,9 +72,21 @@ addEventListener("fetch", async (event) => {
 });
 
 addEventListener("message", (event) => {
-  console.log("[Service Worker] Got message:", event);
+  console.log("[Service Worker] Got message from client %s:", event.source.url, event.data);
 
-  event.source.postMessage({ pong: "OK, recieved response. I love that" });
+  const { type, id, payload: requestPayload } = event.data;
+
+  if (type === "exchange") {
+    const responseData = {
+      type,
+      id,
+      payload: {
+        hello: "Hello, you",
+        requestPayload
+      }
+    };
+    event.source.postMessage(responseData);
+  }
 });
 
 async function fetchWithTimeout(request, timeout) {
@@ -97,3 +106,10 @@ async function fetchWithTimeout(request, timeout) {
       .catch(reject);
   });
 }
+
+setInterval(async () => {
+  const currentClients = await clients.matchAll();
+  for (const client of currentClients) {
+    client.postMessage({ ping: "Ping", date: new Date().getTime() });
+  }
+}, 5000);
