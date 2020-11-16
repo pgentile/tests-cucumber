@@ -34,7 +34,7 @@ addEventListener("fetch", async (event) => {
   const requestUrl = new URL(request.url);
   const path = requestUrl.pathname;
 
-  console.debug("[SW] Intercepted request for event:", event);
+  console.debug("[Service Worker] Intercepted request for event:", event);
 
   if (path.startsWith("/ui/")) {
     const getResponse = async () => {
@@ -106,10 +106,3 @@ async function fetchWithTimeout(request, timeout) {
       .catch(reject);
   });
 }
-
-setInterval(async () => {
-  const currentClients = await clients.matchAll();
-  for (const client of currentClients) {
-    client.postMessage({ ping: "Ping", date: new Date().getTime() });
-  }
-}, 5000);

@@ -31,30 +31,17 @@ window.addEventListener("load", async () => {
 
     console.info("[SW Client] Controller is", worker);
 
-    const response = await exchange(worker, "Hello, my friend");
-    console.info("[SW Client] Response is", response);
+    const [response1, response2, response3] = await Promise.all([
+      exchange(worker, "Hello, my friend"),
+      exchange(worker, "Bonjour"),
+      exchange(worker, "Güten Tag")
+    ]);
+
+    console.info("[SW Client] Response 1 is", response1);
+    console.info("[SW Client] Response 2 is", response2);
+    console.info("[SW Client] Response 3 is", response3);
   }
 });
-
-/**
- * @returns {Promise<ServiceWorker>}
- */
-async function registerWorker() {
-  const registration = await navigator.serviceWorker.register(new URL("./serviceWorker.js", import.meta.url), {
-    scope: "/ui/"
-  });
-
-  if (registration.active) {
-    return registration.active;
-  }
-
-  return new Promise((resolve) => {
-    registration.addEventListener("updatefound", (event) => {
-      console.info("[SW Client] Update found:", event);
-      resolve(event.target);
-    });
-  });
-}
 
 /**
  * Exchange with the service worker.
