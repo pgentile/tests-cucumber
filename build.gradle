@@ -264,6 +264,8 @@ project("${rootProject.name}-frontend") {
 
     task copyAssets(type: Copy, dependsOn: webpack) {
         from 'build/dist'
+        from 'public/ui/assets'
+        from 'public/index.html'
         into "$project.buildDir/ui-resources/ui"
     }
 
@@ -272,7 +274,7 @@ project("${rootProject.name}-frontend") {
         into "$project.buildDir/ui-resources/ui"
     }
 
-    tasks.processResources.dependsOn(copyAssets, copyIndexHtml)
+    tasks.processResources.dependsOn copyAssets
 
 }
 
